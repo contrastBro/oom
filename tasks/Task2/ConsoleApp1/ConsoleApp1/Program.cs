@@ -11,20 +11,55 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Sedan sedan1 = new Sedan();
-            Console.WriteLine("sedan1 initial:\n" + sedan1.getShortSummary() + "\n");
+            Console.WriteLine("sedan1 initial:\n" + sedan1.GetShortSummary() + "\n");
 
 
             StationWagon stationWagon1 = new StationWagon();
-            Console.WriteLine("stationWagon1 initial:\n" + stationWagon1.getShortSummary() + "\n");
+            Console.WriteLine("stationWagon1 initial:\n" + stationWagon1.GetShortSummary() + "\n");
         }
     }
     
+    class GeneralFeatures
+    {
+        private bool engineOn;
+        private bool doorsLocked;
+        private bool hazardsOn;
+        private double fuelLevel;
+
+        public bool EngineOn { get; set; }
+        public bool DoorsLocked { get; set; }
+        public bool HazardsOn { get; set; }
+        public double FuelLevel {
+            get
+            {
+                return fuelLevel;
+            }
+            set
+            {
+                if(value < 0)
+                {
+                    fuelLevel = 0;
+                }
+                fuelLevel = value;
+            }
+        }
+
+        public GeneralFeatures()
+        {
+            this.EngineOn = false;
+            this.DoorsLocked = true;
+            this.HazardsOn = false;
+            this.FuelLevel = 0;
+        }
+    }
+
     /* abstract base class containing only abstract methods: interface */
     interface ICar
     {
-        void toggleEngineStartButton();
-        void toggleDoorsLockButton();
-        void toggleHazardsButton();
+        void ToggleEngineStartButton();
+        void ToggleDoorsLockButton();
+        void ToggleHazardsButton();
+        void UpdateFuelLevel(double newFuelLevel);
     }
 
     enum climateMode { manual, auto, off };
@@ -32,46 +67,41 @@ namespace ConsoleApp1
     class Sedan : ICar
     {
         // private field(s)
-        private bool engineOn;
-        private bool doorsLocked;
-        private bool hazardsOn;
-        private double fuelLevel;
+        private GeneralFeatures generalFeatures;
         private climateMode climMode;
 
         // public properties
-        public bool IsEngineRunning { get { return engineOn; } }
-        public bool AreDoorsLocked { get { return doorsLocked; } }
-        public bool IsHazardOn { get { return hazardsOn; } }
-        public double FuelTank { get { return fuelLevel; } set { fuelLevel = value; } }
 
         // 1 constructor
         public Sedan()
         {
-            this.engineOn = false;
-            this.doorsLocked = true;
-            this.hazardsOn = false;
-            this.fuelLevel = 0;
+            this.generalFeatures = new GeneralFeatures();
             this.climMode = climateMode.off;
         }
 
         // interface implementation
-        public void toggleDoorsLockButton()
+        public void ToggleDoorsLockButton()
         {
-            this.doorsLocked = !this.doorsLocked;
+            this.generalFeatures.DoorsLocked = !this.generalFeatures.DoorsLocked;
         }
 
-        public void toggleEngineStartButton()
+        public void ToggleEngineStartButton()
         {
-            this.engineOn = !this.engineOn;
+            this.generalFeatures.EngineOn = !this.generalFeatures.EngineOn;
         }
 
-        public void toggleHazardsButton()
+        public void ToggleHazardsButton()
         {
-            this.hazardsOn = !this.hazardsOn;
+            this.generalFeatures.HazardsOn = !this.generalFeatures.HazardsOn;
+        }
+
+        public void UpdateFuelLevel(double newFuelLevel)
+        {
+            this.generalFeatures.FuelLevel = newFuelLevel;
         }
 
         // public method(s)
-        public void toggleClimateControlAutoButton()
+        public void ToggleClimateControlAutoButton()
         {
             if (this.climMode == climateMode.auto)
             {
@@ -83,9 +113,9 @@ namespace ConsoleApp1
             }
         }
 
-        public String getShortSummary()
+        public String GetShortSummary()
         {
-            return "Engine running?: " + this.IsEngineRunning + "\nDoors locked?: " + this.AreDoorsLocked + "\nHazard on?: " + this.IsHazardOn + "\nFuel level: " + this.FuelTank + "\nClimate mode: " + this.climMode;
+            return "Engine running?: " + this.generalFeatures.EngineOn + "\nDoors locked?: " + this.generalFeatures.DoorsLocked + "\nHazard on?: " + this.generalFeatures.HazardsOn + "\nFuel level: " + this.generalFeatures.FuelLevel + "\nClimate mode: " + this.climMode;
         }
 
     }
@@ -93,52 +123,47 @@ namespace ConsoleApp1
     class StationWagon : ICar
     {
         // private field(s)
-        private bool engineOn;
-        private bool doorsLocked;
-        private bool hazardsOn;
-        private double fuelLevel;
+        private GeneralFeatures generalFeatures;
         private bool rearHatchOpen;
 
         // public properties
-        public bool IsEngineRunning { get { return engineOn; } }
-        public bool AreDoorsLocked { get { return doorsLocked; } }
-        public bool IsHazardOn { get { return hazardsOn; } }
-        public double FuelTank { get { return fuelLevel; } set { fuelLevel = value; } }
 
         // 1 constructor
         public StationWagon()
         {
-            this.doorsLocked = true;
-            this.engineOn = false;
-            this.hazardsOn = false;
-            this.fuelLevel = 0;
+            this.generalFeatures = new GeneralFeatures();
         }
 
         // interface implementation
-        public void toggleDoorsLockButton()
+        public void ToggleDoorsLockButton()
         {
-            this.doorsLocked = !this.doorsLocked;
+            this.generalFeatures.DoorsLocked = !this.generalFeatures.DoorsLocked;
         }
 
-        public void toggleEngineStartButton()
+        public void ToggleEngineStartButton()
         {
-            this.engineOn = !this.engineOn;
+            this.generalFeatures.EngineOn = !this.generalFeatures.EngineOn;
         }
 
-        public void toggleHazardsButton()
+        public void ToggleHazardsButton()
         {
-            this.hazardsOn = !this.hazardsOn;
+            this.generalFeatures.HazardsOn = !this.generalFeatures.HazardsOn;
+        }
+
+        public void UpdateFuelLevel(double newFuelLevel)
+        {
+            this.generalFeatures.FuelLevel = newFuelLevel;
         }
 
         // public method(s)
-        public void toggleRearHatchOpenButton()
+        public void ToggleRearHatchOpenButton()
         {
             this.rearHatchOpen = true;
         }
 
-        public String getShortSummary()
+        public String GetShortSummary()
         {
-            return "Engine running?: " + this.IsEngineRunning + "\nDoors locked?: " + this.AreDoorsLocked + "\nHazard on?: " + this.IsHazardOn + "\nFuel level: " + this.FuelTank + "\nRear Hatch open?: " + this.rearHatchOpen;
+            return "Engine running?: " + this.generalFeatures.EngineOn + "\nDoors locked?: " + this.generalFeatures.DoorsLocked + "\nHazard on?: " + this.generalFeatures.HazardsOn + "\nFuel level: " + this.generalFeatures.FuelLevel + "\nRear Hatch open?: " + this.rearHatchOpen;
         }
 
     }
